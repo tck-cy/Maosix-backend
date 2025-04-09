@@ -26,6 +26,7 @@ router.post(
   departmentRestrict("coffee", "dairy", "apiary", "poultry"),
   createProcedure
 );
+
 router.put(
   "/:id",
   departmentRestrict("coffee", "dairy", "apiary", "poultry"),

@@ -41,6 +41,7 @@ app.use("/api/auth", routes.auth);
 app.use("/api/users", routes.users);
 app.use("/api/procedures", routes.procedures);
 app.use("/api/purchases", routes.purchases);
+app.use("/api", routes);
 
 // Health check
 app.get("/api/health", (req, res) => {

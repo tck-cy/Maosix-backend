@@ -4,11 +4,11 @@ const { User } = require("../models");
 const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
 
-const login = async (req, res, next) => {
+exports.login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    // Check if user exists
+    // 1. Find user
     const user = await User.scope("withPassword").findOne({
       where: { username },
     });
@@ -18,7 +18,7 @@ const login = async (req, res, next) => {
         .json(new ApiResponse(null, "Invalid credentials", false));
     }
 
-    // Verify password
+    // 2. Verify password
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
       return res
@@ -26,14 +26,14 @@ const login = async (req, res, next) => {
         .json(new ApiResponse(null, "Invalid credentials", false));
     }
 
-    // Check if user is active
+    // 3. Check if active
     if (!user.is_active) {
       return res
         .status(403)
-        .json(new ApiResponse(null, "Account is inactive", false));
+        .json(new ApiResponse(null, "Account inactive", false));
     }
 
-    // Create JWT token
+    // 4. Create JWT
     const token = jwt.sign(
       {
         id: user.id,
@@ -44,14 +44,13 @@ const login = async (req, res, next) => {
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
-    // Update last login
+    // 5. Update last login
     user.last_login = new Date();
     await user.save();
 
-    // Log successful login
     logger.info(`User ${user.username} logged in`);
 
-    // Send response with token
+    // 6. Send response
     res.status(200).json(
       new ApiResponse({
         user: {
@@ -71,21 +70,13 @@ const login = async (req, res, next) => {
   }
 };
 
-const getCurrentUser = async (req, res, next) => {
+exports.getCurrentUser = async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.user.id);
-    if (!user) {
-      return res
-        .status(404)
-        .json(new ApiResponse(null, "User not found", false));
-    }
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ["password_hash"] },
+    });
     res.status(200).json(new ApiResponse(user));
   } catch (err) {
     next(err);
   }
-};
-
-module.exports = {
-  login,
-  getCurrentUser,
 };

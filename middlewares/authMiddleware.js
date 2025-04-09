@@ -84,8 +84,15 @@ const departmentRestrict = (...departments) => {
   };
 };
 
-module.exports = {
-  auth,
-  restrictTo,
-  departmentRestrict,
+exports.auth = (req, res, next) => {
+  /*...*/
 };
+exports.restrictTo = (...roles) => {
+  /*...*/
+};
+
+// module.exports = {
+//   auth,
+//   restrictTo,
+//   departmentRestrict,
+// };

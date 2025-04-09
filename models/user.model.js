@@ -64,7 +64,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.associate = function (models) {
+  User.associate = (models) => {
+    // Wait until models are available
     User.hasMany(models.CareProcedure, {
       foreignKey: "created_by",
       as: "procedures",
@@ -85,11 +86,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "approved_by",
       as: "approved_purchases",
     });
-    User.hasMany(models.ExcelImport, {
-      foreignKey: "accountant_id",
-      as: "imports",
+    User.hasMany(models.AuditLog, {
+      foreignKey: "user_id",
+      as: "activities",
     });
-    User.hasMany(models.AuditLog, { foreignKey: "user_id", as: "activities" });
   };
 
   return User;
