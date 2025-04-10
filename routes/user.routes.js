@@ -7,6 +7,14 @@ const {
   updateUser,
   deactivateUser,
 } = require("../controllers/userController");
+
+console.log({
+  getAllUsers: typeof getAllUsers, // Should be "function"
+  getUserById: typeof getUserById, // Should be "function"
+  createUser: typeof createUser, // Should be "function"
+  updateUser: typeof updateUser, // Should be "function"
+  deactivateUser: typeof deactivateUser, // Should be "function"
+});
 const { auth, restrictTo } = require("../middlewares/authMiddleware");
 
 // Apply auth middleware to all routes
@@ -26,5 +34,13 @@ router.put("/:id", updateUser);
 
 // DELETE /api/users/:id - Deactivate user (Directors only)
 router.delete("/:id", restrictTo("director"), deactivateUser);
+
+// module.exports = {
+//   getAllUsers,
+//   getUserById,
+//   createUser,
+//   updateUser,
+//   deactivateUser,
+// };
 
 module.exports = router;

@@ -91,8 +91,8 @@ exports.restrictTo = (...roles) => {
   /*...*/
 };
 
-// module.exports = {
-//   auth,
-//   restrictTo,
-//   departmentRestrict,
-// };
+module.exports = {
+  auth,
+  restrictTo,
+  departmentRestrict,
+};

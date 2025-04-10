@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.INTEGER,
+        // allowNull: true,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -31,6 +32,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,
+      },
+      created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: "users",
+          key: "id",
+        },
+        onDelete: "SET NULL",
+        onUpdate: "CASCADE",
       },
     },
     {

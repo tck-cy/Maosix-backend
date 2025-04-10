@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const ApiResponse = require("../utils/apiResponse");
 const logger = require("../utils/logger");
+const bcrypt = require("bcryptjs");
 
 exports.getAllUsers = async (req, res, next) => {
   try {
